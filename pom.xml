@@ -1,0 +1,172 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.radcortez.tomee</groupId>
+  <artifactId>camel-prototype</artifactId>
+  <version>1.0-SNAPSHOT</version>
+  <packaging>war</packaging>
+
+  <name>camel-prototype</name>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+    <!-- plugins versions -->
+    <version.plugin.compiler>3.2</version.plugin.compiler>
+    <version.plugin.war>2.6</version.plugin.war>
+
+    <!-- dependencies versions -->
+    <version.dependency.javaee>6.0-6</version.dependency.javaee>
+    <version.dependency.cxf>2.6.16</version.dependency.cxf>
+    <version.dependency.lombok>1.16.6</version.dependency.lombok>
+    <version.dependency.camel>2.17.0</version.dependency.camel>
+
+    <!-- test dependencies versions -->
+    <version.dependency.junit>4.12</version.dependency.junit>
+    <version.dependency.tomee>1.7.2</version.dependency.tomee>
+  </properties>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>${version.plugin.compiler}</version>
+        <configuration>
+          <source>1.8</source>
+          <target>1.8</target>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-war-plugin</artifactId>
+        <version>${version.plugin.war}</version>
+        <configuration>
+          <failOnMissingWebXml>false</failOnMissingWebXml>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.apache.openejb</groupId>
+      <artifactId>javaee-api</artifactId>
+      <version>${version.dependency.javaee}</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <version>${version.dependency.lombok}</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.camel</groupId>
+      <artifactId>camel-core</artifactId>
+      <version>${version.dependency.camel}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.camel</groupId>
+      <artifactId>camel-cdi</artifactId>
+      <version>${version.dependency.camel}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.camel</groupId>
+      <artifactId>camel-stream</artifactId>
+      <version>${version.dependency.camel}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.camel</groupId>
+      <artifactId>camel-http</artifactId>
+      <version>${version.dependency.camel}</version>
+    </dependency>
+
+    <!--
+    <dependency>
+      <groupId>org.apache.camel</groupId>
+      <artifactId>camel-cxf</artifactId>
+      <version>${version.dependency.camel}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>org.apache.camel</groupId>
+          <artifactId>camel-spring</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>javax.servlet</groupId>
+          <artifactId>javax.servlet-api</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.apache.cxf</groupId>
+          <artifactId>cxf-rt-frontend-jaxrs</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.apache.cxf</groupId>
+          <artifactId>cxf-rt-frontend-jaxws</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.apache.cxf</groupId>
+          <artifactId>cxf-rt-rs-security-oauth</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.apache.cxf</groupId>
+          <artifactId>cxf-rt-bindings-soap</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.springframework</groupId>
+          <artifactId>spring-core</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.springframework</groupId>
+          <artifactId>spring-beans</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.springframework</groupId>
+          <artifactId>spring-context</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    -->
+
+    <!-- Test Dependencies -->
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>${version.dependency.junit}</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.openejb</groupId>
+      <artifactId>arquillian-tomee-embedded</artifactId>
+      <version>${version.dependency.tomee}</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.openejb</groupId>
+      <artifactId>openejb-cxf-rs</artifactId>
+      <version>4.7.3</version>
+      <scope>test</scope>
+    </dependency>
+
+    <!--
+      Not really needed, but org.apache.camel.cdi.Main is including a class from here, the bean is not excluded by the
+      CDI scanner. There is no way to exclude it easily in CDI 1.0.
+    -->
+    <dependency>
+      <groupId>org.apache.deltaspike.cdictrl</groupId>
+      <artifactId>deltaspike-cdictrl-api</artifactId>
+      <version>1.6.0</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+</project>
