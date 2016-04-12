@@ -3,19 +3,20 @@ package com.radcortez.tomee.camel;
 import org.apache.camel.CamelContext;
 import org.apache.camel.ProducerTemplate;
 import org.apache.camel.cdi.Uri;
+import org.apache.cxf.jaxrs.client.ResponseReader;
 import org.apache.cxf.jaxrs.client.WebClient;
 import org.apache.openejb.jee.WebApp;
 import org.apache.openejb.junit.ApplicationComposer;
 import org.apache.openejb.testing.Classes;
 import org.apache.openejb.testing.EnableServices;
 import org.apache.openejb.testing.Jars;
-import org.apache.openejb.testing.JaxrsProviders;
 import org.apache.openejb.testing.Module;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import javax.inject.Inject;
 
+import static java.util.Collections.singletonList;
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -30,7 +31,7 @@ public class EchoResourceTest {
     private CamelContext camelContext;
 
     @Inject
-    @Uri("direct:start")
+    @Uri("direct:get")
     private ProducerTemplate producerTemplate;
 
     @Module
@@ -42,17 +43,27 @@ public class EchoResourceTest {
 
     @Test
     public void testEcho() throws Exception {
-        final String response = WebClient.create("http://localhost:4204")
-                                         .path("/openejb/echo/")
-                                         .query("echo", "Hi!")
-                                         .get(String.class);
-        System.out.println("response = " + response);
-        assertEquals("Hi!", response);
+        final String responseGet = WebClient.create("http://localhost:4204")
+                                            .path("/openejb/echo/")
+                                            .query("echo", "Hi!")
+                                            .get(String.class);
+        System.out.println("responseGet = " + responseGet);
+        assertEquals("Hi!", responseGet);
+
+        final String responsePost = ((String) WebClient.create("http://localhost:4204",
+                                                               singletonList(new ResponseReader(String.class)))
+                                                       .path("/openejb/echo/")
+                                                       .post(new EchoDto("Hi!"))
+                                                       .getEntity());
+        System.out.println("responsePost = " + responsePost);
+        assertEquals("Hi!", responsePost);
     }
 
     @Test
     public void testEchoCamel() throws Exception {
         camelContext.start();
+
         producerTemplate.sendBody("Hi!");
+        camelContext.createProducerTemplate().sendBody("direct:post", "Hi!");
     }
 }
