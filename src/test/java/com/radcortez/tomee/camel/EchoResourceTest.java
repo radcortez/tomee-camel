@@ -9,6 +9,7 @@ import org.apache.openejb.junit.ApplicationComposer;
 import org.apache.openejb.testing.Classes;
 import org.apache.openejb.testing.EnableServices;
 import org.apache.openejb.testing.Jars;
+import org.apache.openejb.testing.JaxrsProviders;
 import org.apache.openejb.testing.Module;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -42,7 +43,7 @@ public class EchoResourceTest {
     @Test
     public void testEcho() throws Exception {
         final String response = WebClient.create("http://localhost:4204")
-                                         .path("/openejb/example/")
+                                         .path("/openejb/echo/")
                                          .query("echo", "Hi!")
                                          .get(String.class);
         System.out.println("response = " + response);

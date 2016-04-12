@@ -17,7 +17,7 @@ public class EchoHttpRoute extends RouteBuilder {
         from("direct:start")
                 .setHeader(Exchange.HTTP_METHOD, constant("GET"))
                 .setHeader(Exchange.HTTP_QUERY, simple("echo=${body}"))
-                .to("http://localhost:4204/openejb/example/")
+                .to("http://localhost:4204/openejb/echo/")
                 .convertBodyTo(String.class)
                 .to("stream:out");
     }

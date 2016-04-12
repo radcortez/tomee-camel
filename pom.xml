@@ -89,7 +89,6 @@
       <version>${version.dependency.camel}</version>
     </dependency>
 
-    <!--
     <dependency>
       <groupId>org.apache.camel</groupId>
       <artifactId>camel-cxf</artifactId>
@@ -133,7 +132,6 @@
         </exclusion>
       </exclusions>
     </dependency>
-    -->
 
     <!-- Test Dependencies -->
     <dependency>

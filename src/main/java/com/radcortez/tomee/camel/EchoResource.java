@@ -12,7 +12,7 @@ import javax.ws.rs.core.MediaType;
  *
  * @author Roberto Cortez
  */
-@Path("/example")
+@Path("/echo")
 @Produces({MediaType.APPLICATION_XML})
 @Consumes({MediaType.APPLICATION_XML})
 public class EchoResource {
