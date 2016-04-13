@@ -10,7 +10,12 @@ import org.apache.camel.Converter;
 @Converter
 public class TypeConverters {
     @Converter
-    public Echo convert(EchoDto echoDto) {
+    public Echo convert(final EchoDto echoDto) {
         return Echo.builder().id(0L).value(echoDto.getValue()).build();
+    }
+
+    @Converter
+    public String convert(final Echo echo) {
+        return echo.getValue();
     }
 }

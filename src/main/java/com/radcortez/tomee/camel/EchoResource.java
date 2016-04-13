@@ -1,7 +1,6 @@
 package com.radcortez.tomee.camel;
 
 import org.apache.camel.CamelContext;
-import org.apache.camel.ProducerTemplate;
 
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
@@ -31,7 +30,6 @@ public class EchoResource {
 
     @POST
     public String echoPost(final EchoDto echo) {
-        camelContext.createProducerTemplate().sendBody("direct:rest-post", echo);
-        return echo.getValue();
+        return camelContext.createProducerTemplate().requestBody("direct:rest-post", echo, String.class);
     }
 }

@@ -27,7 +27,9 @@ public class EchoRoute extends RouteBuilder {
     public void configure() throws Exception {
         from("direct:rest-post")
                 .convertBodyTo(Echo.class)
-                .to("jpa:?transactionManager=#jtaTransactionManager");
+                .to("jpa:?transactionManager=#jtaTransactionManager")
+                .convertBodyTo(String.class)
+                .log("Saved ${body}");
     }
 
     @Produces
