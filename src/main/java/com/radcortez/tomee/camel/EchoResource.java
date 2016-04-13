@@ -1,5 +1,9 @@
 package com.radcortez.tomee.camel;
 
+import org.apache.camel.CamelContext;
+import org.apache.camel.ProducerTemplate;
+
+import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -17,6 +21,9 @@ import javax.ws.rs.core.MediaType;
 @Produces({MediaType.APPLICATION_XML})
 @Consumes({MediaType.APPLICATION_XML})
 public class EchoResource {
+    @Inject
+    private CamelContext camelContext;
+
     @GET
     public String echoGet(@QueryParam(value = "echo") final String echo) {
         return echo;
@@ -24,6 +31,7 @@ public class EchoResource {
 
     @POST
     public String echoPost(final EchoDto echo) {
+        camelContext.createProducerTemplate().sendBody("direct:rest-post", echo);
         return echo.getValue();
     }
 }

@@ -6,6 +6,7 @@ import org.apache.camel.cdi.Uri;
 import org.apache.cxf.jaxrs.client.ResponseReader;
 import org.apache.cxf.jaxrs.client.WebClient;
 import org.apache.openejb.jee.WebApp;
+import org.apache.openejb.jee.jpa.unit.PersistenceUnit;
 import org.apache.openejb.junit.ApplicationComposer;
 import org.apache.openejb.testing.Classes;
 import org.apache.openejb.testing.EnableServices;
@@ -35,8 +36,19 @@ public class EchoResourceTest {
     private ProducerTemplate producerTemplate;
 
     @Module
+    public PersistenceUnit partnerPu() {
+        final PersistenceUnit camelPu = new PersistenceUnit("camelPu");
+        camelPu.addClass(Echo.class);
+        camelPu.setExcludeUnlistedClasses(true);
+        camelPu.setProperty("openjpa.jdbc.SynchronizeMappings", "buildSchema(ForeignKeys=true)");
+        camelPu.setProperty("openjpa.Log", "SQL=Trace");
+        camelPu.setProperty("openjpa.ConnectionFactoryProperties", "PrintParameters=true");
+        return camelPu;
+    }
+
+    @Module
     @Jars("camel-cdi")
-    @Classes(cdi = true, value = {EchoResource.class, EchoHttpRoute.class})
+    @Classes(cdi = true, value = {TypeConverters.class, EchoResource.class, EchoRoute.class, EchoHttpRoute.class})
     public WebApp webApp() {
         return new WebApp();
     }
@@ -63,7 +75,7 @@ public class EchoResourceTest {
     public void testEchoCamel() throws Exception {
         camelContext.start();
 
-        producerTemplate.sendBody("Hi!");
+        //producerTemplate.sendBody("Hi!");
         camelContext.createProducerTemplate().sendBody("direct:post", "Hi!");
     }
 }

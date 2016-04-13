@@ -95,12 +95,8 @@
       <version>${version.dependency.camel}</version>
       <exclusions>
         <exclusion>
-          <groupId>org.apache.camel</groupId>
-          <artifactId>camel-spring</artifactId>
-        </exclusion>
-        <exclusion>
           <groupId>org.springframework</groupId>
-          <artifactId>spring-orm</artifactId>
+          <artifactId>spring-aop</artifactId>
         </exclusion>
       </exclusions>
     </dependency>
