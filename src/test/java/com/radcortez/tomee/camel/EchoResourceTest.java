@@ -65,7 +65,7 @@ public class EchoResourceTest {
         final String responsePost = ((String) WebClient.create("http://localhost:4204",
                                                                singletonList(new ResponseReader(String.class)))
                                                        .path("/openejb/echo/")
-                                                       .post(new EchoDto("Hi!"))
+                                                       .post(EchoDto.of("Hi!"))
                                                        .getEntity());
         System.out.println("responsePost = " + responsePost);
         assertEquals("Hi!", responsePost);
@@ -75,7 +75,7 @@ public class EchoResourceTest {
     public void testEchoCamel() throws Exception {
         camelContext.start();
 
-        //producerTemplate.sendBody("Hi!");
-        camelContext.createProducerTemplate().sendBody("direct:post", "Hi!");
+        camelContext.createProducerTemplate().sendBody("direct:post", EchoDto.of("Hi!"));
+        camelContext.createProducerTemplate().sendBody("direct:post", EchoDto.of(null));
     }
 }

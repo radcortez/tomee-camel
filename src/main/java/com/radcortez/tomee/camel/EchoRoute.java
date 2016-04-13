@@ -1,6 +1,7 @@
 package com.radcortez.tomee.camel;
 
 import org.apache.camel.builder.RouteBuilder;
+import org.apache.camel.component.bean.validator.BeanValidationException;
 import org.springframework.transaction.jta.JtaTransactionManager;
 
 import javax.enterprise.inject.Produces;
@@ -10,6 +11,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceContext;
 import javax.transaction.UserTransaction;
+import javax.ws.rs.core.Response;
 
 /**
  * Description.
@@ -25,11 +27,17 @@ public class EchoRoute extends RouteBuilder {
 
     @Override
     public void configure() throws Exception {
+        onException(BeanValidationException.class)
+                .handled(true)
+                .convertBodyTo(Response.class);
+
         from("direct:rest-post")
+                .to("bean-validator:echo-validation")
                 .convertBodyTo(Echo.class)
                 .to("jpa:?transactionManager=#jtaTransactionManager")
-                .convertBodyTo(String.class)
-                .log("Saved ${body}");
+                .log("Saved ${body}")
+                .convertBodyTo(EchoDto.class)
+                .convertBodyTo(Response.class);
     }
 
     @Produces
