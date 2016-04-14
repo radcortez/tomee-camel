@@ -13,7 +13,7 @@ import javax.ws.rs.core.MediaType;
  * @author Roberto Cortez
  */
 @Named
-public class EchoHttpRoute extends RouteBuilder {
+public class EchoRestRoute extends RouteBuilder {
     @Override
     public void configure() throws Exception {
         onException(HttpOperationFailedException.class).continued(true);
@@ -21,14 +21,14 @@ public class EchoHttpRoute extends RouteBuilder {
         from("direct:get")
                 .setHeader(Exchange.HTTP_METHOD, constant("GET"))
                 .setHeader(Exchange.HTTP_QUERY, simple("echo=${body}"))
-                .to("http://localhost:4204/openejb/echo/");
+                .to("http4://localhost:4204/openejb/echo/");
 
         from("direct:post")
                 .setHeader(Exchange.HTTP_METHOD, constant("POST"))
                 .setHeader(Exchange.CONTENT_TYPE, constant(MediaType.APPLICATION_XML))
                 .convertBodyTo(String.class)
                 .log("Payload:\n ${body}")
-                .to("http://localhost:4204/openejb/echo/")
+                .to("http4://localhost:4204/openejb/echo/?throwExceptionOnFailure=false")
                 .log("Response Status Code: ${header." + Exchange.HTTP_RESPONSE_CODE + "}")
                 .convertBodyTo(String.class);
     }

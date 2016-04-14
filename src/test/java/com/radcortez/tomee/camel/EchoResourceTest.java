@@ -48,7 +48,7 @@ public class EchoResourceTest {
 
     @Module
     @Jars("camel-cdi")
-    @Classes(cdi = true, value = {TypeConverters.class, EchoResource.class, EchoRoute.class, EchoHttpRoute.class})
+    @Classes(cdi = true, value = {TypeConverters.class, EchoResource.class, EchoRoute.class, EchoRestRoute.class})
     public WebApp webApp() {
         return new WebApp();
     }
@@ -75,7 +75,18 @@ public class EchoResourceTest {
     public void testEchoCamel() throws Exception {
         camelContext.start();
 
-        camelContext.createProducerTemplate().sendBody("direct:post", EchoDto.of("Hi!"));
-        camelContext.createProducerTemplate().sendBody("direct:post", EchoDto.of(null));
+        final String responseGet = camelContext.createProducerTemplate()
+                                               .requestBody("direct:get", "Hi!", String.class);
+        System.out.println("responseGet = " + responseGet);
+        assertEquals("Hi!", responseGet);
+
+        final String responsePost = camelContext.createProducerTemplate()
+                                                .requestBody("direct:post", EchoDto.of("Hi!"), String.class);
+        System.out.println("responsePost = " + responsePost);
+        assertEquals("Hi!", responsePost);
+
+        final String responsePostNull = camelContext.createProducerTemplate()
+                                                    .requestBody("direct:post", EchoDto.of(null), String.class);
+        System.out.println("responsePostNull = " + responsePostNull);
     }
 }
