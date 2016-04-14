@@ -36,7 +36,7 @@ public class TypeConverters {
         final Optional<BeanValidationException> validationException =
                 Optional.ofNullable(exchange.getProperty(Exchange.EXCEPTION_CAUGHT, BeanValidationException.class));
 
-        return validationException.map(e -> status(BAD_REQUEST).build())
+        return validationException.map(e -> status(BAD_REQUEST).entity(e.getMessage()).build())
                                   .orElse(status(CREATED).entity(echoDto.getValue()).build());
     }
 
